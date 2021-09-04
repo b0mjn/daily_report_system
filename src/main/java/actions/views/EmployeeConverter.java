@@ -1,4 +1,4 @@
-package views;
+package actions.views;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +98,6 @@ public class EmployeeConverter {
             e.setCreatedAt(ev.getCreatedAt());
             e.setUpdatedAt(ev.getUpdatedAt());
             e.setDeleteFlag(ev.getDeleteFlag());
-
         }
 
 }
