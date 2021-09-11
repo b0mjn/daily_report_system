@@ -37,3 +37,7 @@
 <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${employee.id}" />
 <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
 <button type="submit">投稿</button>
+<br /><br />
+<label for="${AttributeConst.EMP_UPLOAD.getValue()}">一括登録</label><br />
+<input type="file" name="${AttributeConst.EMP_UPLOAD.getValue()}" ><br /><br />
+<button type="submit">送信</button>
