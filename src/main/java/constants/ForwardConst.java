@@ -24,6 +24,7 @@ public enum ForwardConst {
     CMD_LOGOUT("logout"),
     CMD_NEW("entryNew"),
     CMD_CREATE("create"),
+    CMD_CREATE2("create2"), //★追加
     CMD_EDIT("edit"),
     CMD_UPDATE("update"),
     CMD_DESTROY("destroy"),

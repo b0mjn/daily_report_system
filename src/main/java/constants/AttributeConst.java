@@ -33,9 +33,10 @@ public enum AttributeConst {
     EMP_PASS("password"),
     EMP_NAME("name"),
     EMP_ADMIN_FLG("admin_flag"),
-    
-    //従業員一括登録★
-    EMP_UPLOAD("employees_folder"),
+
+    //従業員一括登録★追加
+    EMP_FILE("employees_file"),
+    //EMP_UPLOADPATH("employees_folder"),
 
     //管理者フラグ
     ROLE_ADMIN(1),

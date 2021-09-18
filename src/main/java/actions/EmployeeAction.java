@@ -1,14 +1,17 @@
 package actions;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import actions.views.EmployeeView;
 import constants.AttributeConst;
@@ -22,6 +25,7 @@ import services.EmployeeService;
  * 従業員に関わる処理を行うActionクラス
  *
  */
+
 public class EmployeeAction extends ActionBase {
 
     private EmployeeService service;
@@ -143,19 +147,118 @@ public class EmployeeAction extends ActionBase {
     }
 
     /**
-     * 新規登録を行う
+     * 一括登録を行う
      * @throws ServletException
      * @throws IOException
+     * @MultipartConfig
      */
-    @MultipartConfig
-    public class Main extends HttpServlet {
-        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            RequestDispatcher rd=request.getRequestDispatcher("/WEB-INF/view/form.jsp");
-            rd.forward(request, response);
+    public void create2() throws ServletException, IOException{
+
+        //name属性がtextのファイルをPartオブジェクトとして取得
+        Part part=request.getPart(AttributeConst.EMP_FILE.getValue());
+
+        //現在の日時を取得
+        Date d = new Date();
+
+        //日付フォーマットを指定 yyyyMMddHHmmss
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddmmss");
+        String dm = sdf.format(d);
+
+        //ファイル名を取得
+        String filename=part.getSubmittedFileName();
+
+        //アップロードするフォルダ
+        String path = ("C:/pleiades/workspace/daily_report_system/src/main/webapp/");
+
+        //フォルダへcsvfileの書き込み
+        part.write(path + dm + filename  );
+
+
+
+        try {
+            // ファイルを読み込みモードで開く
+            InputStream is = new FileInputStream(path + dm + filename );
+
+            // ファイルから読み込む操作をするオブジェクトを生成する
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+            // 読み込み行
+            String str;
+
+            //読み込み行数の管理
+            int i = 0;
+
+            //列名を管理する為の配列//String[] arr = null;
+
+
+            // strが空っぽでなければ中身を表示して
+            //さらに次の行の内容を取得
+            while((str = reader.readLine()) != null) {
+
+
+                //先頭行は列名
+                if (i == 0 ) {
+                    // ★★★★★★continue = 次のループへスキップする。カウンタであるiをインクリメントする。
+                    i++;
+                    continue;
+
+                  } else {
+                    //カンマで分割した内容を配列に格納する
+                    String[] data = str.split(",");
+
+                      EmployeeView ev = new EmployeeView(
+                              null,
+                              data[1],
+                              data[2],
+                              data[3],
+                              Integer.parseInt(data[0]),
+                              null,
+                              null,
+                              AttributeConst.DEL_FLAG_FALSE.getIntegerValue());
+
+                          //アプリケーションスコープからpepper文字列を取得
+                          String pepper = getContextScope(PropertyConst.PEPPER);
+
+                          //従業員情報登録
+                          List<String> errors = service.create(ev, pepper);
+
+                          if (errors.size() > 0) {
+                              //登録中にエラーがあった場合
+
+                              putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+                              putRequestScope(AttributeConst.EMPLOYEE, ev); //入力された従業員情報
+                              putRequestScope(AttributeConst.ERR, errors); //エラーのリスト
+
+                              //新規登録画面を再表示
+                              forward(ForwardConst.FW_EMP_NEW);
+
+                          } else {
+
+                          }
+                  }
+                  //行数のインクリメント
+                  i++;
+            }
+
+            // ファイルを閉じる(readerとisの使用をやめる）
+            reader.close();
+            is.close();
+
+            //セッションに登録完了のフラッシュメッセージを設定
+            putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
+            //一覧画面にリダイレクト
+            redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-    public void create() throws ServletException, IOException{
-    }
+        //一覧画面にリダイレクト
+        //redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX);
+        }
+
 
 
 
@@ -306,4 +409,3 @@ public class EmployeeAction extends ActionBase {
 
         }
     }
-}

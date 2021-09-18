@@ -243,4 +243,10 @@ public abstract class ActionBase{
     protected <R> R getContextScope(PropertyConst key) {
         return (R) context.getAttribute(key.getValue());
     }
+
+    /**
+     * アプリケーションスコープから指定されたパラメータの値を取得し、返却する
+     * @param key パラメータ名
+     * @return パラメータの値
+     */
 }
