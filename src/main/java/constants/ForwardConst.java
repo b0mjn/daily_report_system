@@ -24,10 +24,12 @@ public enum ForwardConst {
     CMD_LOGOUT("logout"),
     CMD_NEW("entryNew"),
     CMD_CREATE("create"),
-    CMD_CREATE2("create2"), //★追加
+    CMD_CREATE2("create2"), //★追加★
     CMD_EDIT("edit"),
     CMD_UPDATE("update"),
     CMD_DESTROY("destroy"),
+    CMD_SEARCH("search_word"),//★★追加★★
+
 
     //jsp
     FW_ERR_UNKNOWN("error/unknown"),

@@ -151,3 +151,7 @@ table#report_list .report_action {
 h3{
     font-size: larger;
 }
+
+.search_word{
+   text-align:right;
+}

@@ -36,7 +36,6 @@ public enum AttributeConst {
 
     //従業員一括登録★追加
     EMP_FILE("employees_file"),
-    //EMP_UPLOADPATH("employees_folder"),
 
     //管理者フラグ
     ROLE_ADMIN(1),
@@ -53,7 +52,8 @@ public enum AttributeConst {
     REP_ID("id"),
     REP_DATE("report_date"),
     REP_TITLE("title"),
-    REP_CONTENT("content");
+    REP_CONTENT("content"),
+    REP_SEARCH("search_word");
 
     private final String text;
     private final Integer i;

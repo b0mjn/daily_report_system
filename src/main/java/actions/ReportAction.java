@@ -229,4 +229,15 @@ public class ReportAction extends ActionBase {
             }
         }
     }
+
+    /**
+     * 検索を行う　　★★追加★★
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void search_word() throws ServletException, IOException {
+        //新規登録画面を表示
+        forward(ForwardConst.FW_REP_NEW);
+
+    }
 }

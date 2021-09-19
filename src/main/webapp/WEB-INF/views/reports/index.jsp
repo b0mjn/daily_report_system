@@ -2,11 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="constants.ForwardConst" %>
+<%@ page import="constants.AttributeConst" %>
 
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commShow" value="${ForwardConst.CMD_SHOW.getValue()}" />
 <c:set var="commNew" value="${ForwardConst.CMD_NEW.getValue()}" />
+<c:set var="commSearch" value="${ForwardConst.CMD_SEARCH.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -16,6 +18,13 @@
             </div>
         </c:if>
         <h2>日報　一覧</h2>
+
+            <form class=earch_word  method ="POST" action="<c:url value='?action=${actRep}&command=${commSearch}'/>">
+                <input type="search" name="${AttributeConst.REP_SEARCH.getValue()}" placeholder="検索キーワードを入力" />
+                <button type="submit">検索</button>
+                <br /><br />
+            </form>
+
         <table id="report_list">
             <tbody>
                 <tr>
