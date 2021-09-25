@@ -34,7 +34,7 @@ public enum AttributeConst {
     EMP_NAME("name"),
     EMP_ADMIN_FLG("admin_flag"),
 
-    //従業員一括登録★追加
+    //従業員一括登録★追加★
     EMP_FILE("employees_file"),
 
     //管理者フラグ
@@ -53,7 +53,8 @@ public enum AttributeConst {
     REP_DATE("report_date"),
     REP_TITLE("title"),
     REP_CONTENT("content"),
-    REP_SEARCH("search_word");
+    REP_SEARCH("search_word"), //★★追加★★
+    REP_COUNT_SEARCH("reports_coun_searcht"); //★★追加★★,
 
     private final String text;
     private final Integer i;

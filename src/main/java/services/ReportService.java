@@ -48,6 +48,21 @@ public class ReportService extends ServiceBase {
     }
 
     /**
+     * ★★追加★★
+     * 検索ワードを含む日報テーブルのデータの件数を取得し、返却する
+     * @return データの件数
+     */
+
+
+    public long countSearch() {
+        long reports_coun_searcht = (long) em.createNamedQuery(JpaConst.Q_REP_COUNT_SEARCH , Long.class)
+                //.setParameter(JpaConst.JPQL_PARM_TITLE,"%" + AttributeConst.REP_SEARCH + "%")
+                .getSingleResult();
+        return reports_coun_searcht;
+    }
+
+
+    /**
      * 指定されたページ数の一覧画面に表示する日報データを取得し、ReportViewのリストで返却する
      * @param page ページ数
      * @return 一覧画面に表示するデータのリスト
@@ -62,6 +77,24 @@ public class ReportService extends ServiceBase {
     }
 
     /**
+     * ★★追加★★
+     * 指定されたページ数の一覧画面に表示する日報データを取得し、ReportViewのリストで返却する
+     * @param page ページ数
+     * @return 一覧画面に表示するデータのリスト
+     */
+
+    public List<ReportView> getSearchPerPage(String search_word) {
+        int page = 1;
+        List<Report> reports = em.createNamedQuery(JpaConst.Q_REP_GET_SEARCH, Report.class)
+                .setParameter(JpaConst.JPQL_PARM_TITLE,"%" + search_word + "%")
+                .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
+                .setMaxResults(JpaConst.ROW_PER_PAGE)
+                .getResultList();
+        return ReportConverter.toViewList(reports);
+    }
+
+
+    /**
      * 日報テーブルのデータの件数を取得し、返却する
      * @return データの件数
      */
@@ -70,6 +103,26 @@ public class ReportService extends ServiceBase {
                 .getSingleResult();
         return reports_count;
     }
+
+
+
+    /**
+     * ★★追加★★
+     * 指定した従業員が作成した日報データの件数を取得し、、返却する
+     * @param employee
+     * @return 日報データの件数
+
+
+    public long countSearch() {
+
+        long count = (long) em.createNamedQuery(JpaConst.Q_REP_GET_SEARCH, Long.class)
+                //.setParameter(JpaConst.JPQL_PARM_TITLE, ReportConverter.toModel(title))
+                .getSingleResult();
+
+        return count;
+    }
+*/
+
 
     /**
      * idを条件に取得したデータをReportViewのインスタンスで返却する

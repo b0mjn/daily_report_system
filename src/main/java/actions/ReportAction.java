@@ -235,9 +235,35 @@ public class ReportAction extends ActionBase {
      * @throws ServletException
      * @throws IOException
      */
-    public void search_word() throws ServletException, IOException {
-        //新規登録画面を表示
-        forward(ForwardConst.FW_REP_NEW);
 
+    public void search_word() throws ServletException, IOException {
+        //検索ワードを取得
+        String search_word = getRequestParam(AttributeConst.REP_SEARCH);
+
+        //指定されたページ数の一覧画面に表示する日報データを取得
+        int page = getPage();
+        List<ReportView> reports = service.getSearchPerPage(search_word);
+
+        //全日報データの件数を取得
+        long reports_coun_searcht  = service.countSearch();
+
+        putRequestScope(AttributeConst.REPORTS, reports); //取得した日報データ
+        putRequestScope(AttributeConst.REP_COUNT, reports_coun_searcht); //検索ワードを含む日報データの件数
+        putRequestScope(AttributeConst.PAGE, page); //ページ数
+        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+
+        //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
+        String flush = getSessionScope(AttributeConst.FLUSH);
+        if (flush != null) {
+            putRequestScope(AttributeConst.FLUSH, flush);
+            removeSessionScope(AttributeConst.FLUSH);
+        }
+
+        //一覧画面を表示
+        forward(ForwardConst.FW_REP_INDEX);
+
+        //テスト用
+        //forward(ForwardConst.FW_REP_EDIT);
     }
+
 }

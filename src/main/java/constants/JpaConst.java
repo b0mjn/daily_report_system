@@ -49,6 +49,8 @@ public interface JpaConst {
     String JPQL_PARM_CODE = "code"; //社員番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; //従業員
+    String JPQL_PARM_TITLE = "title"; //タイトル★★追加★★
+
 
     //NamedQueryの nameとquery
     //全ての従業員をidの降順に取得する
@@ -76,4 +78,19 @@ public interface JpaConst {
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
 
+    //★★追加★★
+    //検索ワードを含む日報をidの降順に取得する
+    String Q_REP_GET_SEARCH = ENTITY_REP + ".getSearch";
+    //String Q_REP_GET_SEARCH_DEF = "SELECT r FROM Report  WHERE r.employee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY r.id DESC";
+    String Q_REP_GET_SEARCH_DEF ="SELECT r FROM Report AS r WHERE  r.title LIKE : " + JPQL_PARM_TITLE + " OR r.content LIKE :" + JPQL_PARM_TITLE  ;
+                                  //"SELECT r FROM Report AS r WHERE  r.title LIKE :" + JPQL_PARM_TITLE + " ORDER BY r.id DESC ";
+                                   //SELECT title FROM reports WHERE title LIKE '%"検索ワード"%'  ORDER BY id DESC;
+                                   //SELECT title, content FROM reports WHERE title LIKE 'eee' OR content LIKE 'eee'  ORDER BY id DESC;
+                                  // OR r.content LIKE :" + JPQL_PARM_TITLE + "
+    //★★追加★★
+    //検索ワードを含む日報の件数を取得する
+    String Q_REP_COUNT_SEARCH = ENTITY_REP + ".countSearch";
+    String Q_REP_COUNT_SEARCH_DEF ="SELECT COUNT(r) FROM Report AS r";
+                                      //"SELECT COUNT(r) FROM Report AS r WHERE  r.title LIKE : " + JPQL_PARM_TITLE + " OR r.content LIKE :" + JPQL_PARM_TITLE;
+                                      //SELECT COUNT(*)  FROM reports WHERE title LIKE 'eee' OR content LIKE 'eee'  ORDER BY id DESC;
 }
