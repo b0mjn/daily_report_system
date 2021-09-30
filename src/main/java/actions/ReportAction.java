@@ -42,28 +42,40 @@ public class ReportAction extends ActionBase {
      */
     public void index() throws ServletException, IOException {
 
-        //指定されたページ数の一覧画面に表示する日報データを取得
-        int page = getPage();
-        List<ReportView> reports = service.getAllPerPage(page);
+        //クエリパラメータから検索ワードを取得
+        String search_word = request.getParameter("search_word");
 
-        //全日報データの件数を取得
-        long reportsCount = service.countAll();
+        //検索ワード値があればsearch_word()へ
+        if(search_word != null){
+             search_word();
 
-        putRequestScope(AttributeConst.REPORTS, reports); //取得した日報データ
-        putRequestScope(AttributeConst.REP_COUNT, reportsCount); //全ての日報データの件数
-        putRequestScope(AttributeConst.PAGE, page); //ページ数
-        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+        }else {
 
-        //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
-        String flush = getSessionScope(AttributeConst.FLUSH);
-        if (flush != null) {
-            putRequestScope(AttributeConst.FLUSH, flush);
-            removeSessionScope(AttributeConst.FLUSH);
+                //指定されたページ数の一覧画面に表示する日報データを取得
+                int page = getPage();
+                List<ReportView> reports = service.getAllPerPage(page);
+
+                //全日報データの件数を取得
+                long reportsCount = service.countAll();
+
+                putRequestScope(AttributeConst.REPORTS, reports); //取得した日報データ
+                putRequestScope(AttributeConst.REP_COUNT, reportsCount); //全ての日報データの件数
+                putRequestScope(AttributeConst.PAGE, page); //ページ数
+                putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+
+                //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
+                String flush = getSessionScope(AttributeConst.FLUSH);
+                    if (flush != null) {
+                        putRequestScope(AttributeConst.FLUSH, flush);
+                        removeSessionScope(AttributeConst.FLUSH);
+                    }
+
+                //一覧画面を表示
+                forward(ForwardConst.FW_REP_INDEX);
         }
-
-        //一覧画面を表示
-        forward(ForwardConst.FW_REP_INDEX);
+        
     }
+
     /**
      * 新規登録画面を表示する
      * @throws ServletException
@@ -237,20 +249,26 @@ public class ReportAction extends ActionBase {
      */
 
     public void search_word() throws ServletException, IOException {
+
         //検索ワードを取得
         String search_word = getRequestParam(AttributeConst.REP_SEARCH);
 
         //指定されたページ数の一覧画面に表示する日報データを取得
         int page = getPage();
-        List<ReportView> reports = service.getSearchPerPage(search_word);
+        List<ReportView> reports = service.getSearchPerPage(search_word, page);
 
-        //全日報データの件数を取得
-        long reports_coun_searcht  = service.countSearch();
+        //?
+        //ReportView word = (ReportView) getSessionScope(AttributeConst.REP_SEARCH);
+
+
+        //検索ワードを含む日報データの件数を取得
+        long reports_coun_searcht  = service.countSearch(search_word);
 
         putRequestScope(AttributeConst.REPORTS, reports); //取得した日報データ
         putRequestScope(AttributeConst.REP_COUNT, reports_coun_searcht); //検索ワードを含む日報データの件数
         putRequestScope(AttributeConst.PAGE, page); //ページ数
         putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+        putRequestScope(AttributeConst.REP_SEARCH, search_word); //検索キーワードをリクエストスコープに再セット
 
         //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
         String flush = getSessionScope(AttributeConst.FLUSH);

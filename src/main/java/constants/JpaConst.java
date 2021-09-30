@@ -90,7 +90,8 @@ public interface JpaConst {
     //★★追加★★
     //検索ワードを含む日報の件数を取得する
     String Q_REP_COUNT_SEARCH = ENTITY_REP + ".countSearch";
-    String Q_REP_COUNT_SEARCH_DEF ="SELECT COUNT(r) FROM Report AS r";
+    String Q_REP_COUNT_SEARCH_DEF ="SELECT COUNT(r) FROM Report AS r WHERE r.title LIKE : " + JPQL_PARM_TITLE + " OR r.content LIKE : " + JPQL_PARM_TITLE;
+            //"SELECT COUNT(r) FROM Report AS r WHERE  r.title LIKE : " + JPQL_PARM_TITLE + " OR r.content LIKE : " + JPQL_PARM_TITLE ;
                                       //"SELECT COUNT(r) FROM Report AS r WHERE  r.title LIKE : " + JPQL_PARM_TITLE + " OR r.content LIKE :" + JPQL_PARM_TITLE;
                                       //SELECT COUNT(*)  FROM reports WHERE title LIKE 'eee' OR content LIKE 'eee'  ORDER BY id DESC;
 }

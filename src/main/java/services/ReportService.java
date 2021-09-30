@@ -50,16 +50,16 @@ public class ReportService extends ServiceBase {
     /**
      * ★★追加★★
      * 検索ワードを含む日報テーブルのデータの件数を取得し、返却する
-     * @return データの件数
+     * @return 検索ワードを含むデータの件数
      */
 
 
-    public long countSearch() {
-        long reports_coun_searcht = (long) em.createNamedQuery(JpaConst.Q_REP_COUNT_SEARCH , Long.class)
-                //.setParameter(JpaConst.JPQL_PARM_TITLE,"%" + AttributeConst.REP_SEARCH + "%")
-                .getSingleResult();
-        return reports_coun_searcht;
-    }
+        public long countSearch(String search_word) {
+            long reports_coun_searcht = (long) em.createNamedQuery(JpaConst.Q_REP_COUNT_SEARCH, Long.class)
+                    .setParameter(JpaConst.JPQL_PARM_TITLE,"%" + search_word + "%")
+                    .getSingleResult();
+            return reports_coun_searcht;
+        }
 
 
     /**
@@ -83,8 +83,8 @@ public class ReportService extends ServiceBase {
      * @return 一覧画面に表示するデータのリスト
      */
 
-    public List<ReportView> getSearchPerPage(String search_word) {
-        int page = 1;
+    public List<ReportView> getSearchPerPage(String search_word, int page) {
+        //int page = 1;
         List<Report> reports = em.createNamedQuery(JpaConst.Q_REP_GET_SEARCH, Report.class)
                 .setParameter(JpaConst.JPQL_PARM_TITLE,"%" + search_word + "%")
                 .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
